@@ -38,7 +38,7 @@
             if (isset($_SESSION['utilisateur'])) {
                 $utitilisateur = $_SESSION['utilisateur']['prenom'] . " " . $_SESSION['utilisateur']['nom'];
                 echo "Bienvenue $utitilisateur";
-                echo " <a class='utilisateur' href = 'logout.php' tite = 'Logout'>Me déconnecter </a>";
+                echo " <a class='utilisateur' href = 'logout.php' title = 'Logout'>Me déconnecter </a>";
             }
             ?>  
                  

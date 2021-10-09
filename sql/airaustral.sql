@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 11, 2019 at 07:52 PM
+-- Generation Time: Mar 02, 2020 at 08:09 PM
 -- Server version: 5.5.27-log
 -- PHP Version: 5.4.6
 
@@ -19,8 +19,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `airaustral`
 --
-CREATE DATABASE `airaustral` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `airaustral`;
 
 -- --------------------------------------------------------
 
@@ -35,7 +33,8 @@ CREATE TABLE IF NOT EXISTS `aeroport` (
   `lat` double NOT NULL,
   `long` double NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `idPays` (`idPays`)
+  KEY `idPays` (`idPays`),
+  KEY `idPays_2` (`idPays`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 --
@@ -57,17 +56,21 @@ INSERT INTO `aeroport` (`id`, `nom`, `idPays`, `lat`, `long`) VALUES
 
 CREATE TABLE IF NOT EXISTS `avion` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nom` int(11) NOT NULL,
+  `nom` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
 
 --
 -- Dumping data for table `avion`
 --
 
 INSERT INTO `avion` (`id`, `nom`) VALUES
-(1, 1),
-(2, 2);
+(1, 'Boeing 737 - 1'),
+(2, 'Boeing 737 - 2'),
+(3, 'A350 - 1'),
+(4, 'A350 - 2'),
+(5, 'A350 - 3'),
+(6, 'A380 - 1');
 
 -- --------------------------------------------------------
 
@@ -83,7 +86,7 @@ CREATE TABLE IF NOT EXISTS `cb` (
   `cvv` int(2) NOT NULL,
   `idClient` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=14 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data for table `cb`
@@ -92,7 +95,8 @@ CREATE TABLE IF NOT EXISTS `cb` (
 INSERT INTO `cb` (`id`, `nom`, `numero`, `expiration`, `cvv`, `idClient`) VALUES
 (1, 'Mme.dupond', 1258489625, 2821, 157, 0),
 (2, 'M.rafiki', 2147483647, 220, 788, 0),
-(3, 'Mme.payet', 2147483647, 521, 555, 0);
+(3, 'Mme.payet', 2147483647, 521, 555, 0),
+(4, 'b b', 111, 1244, 444, 4);
 
 -- --------------------------------------------------------
 
@@ -114,35 +118,6 @@ INSERT INTO `classe` (`id`, `nom`) VALUES
 (1, 'Economique'),
 (2, 'Affaire'),
 (3, 'Première');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `client`
---
-
-CREATE TABLE IF NOT EXISTS `client` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nom` varchar(50) NOT NULL,
-  `prenom` varchar(50) NOT NULL,
-  `adresse` varchar(50) NOT NULL,
-  `email` varchar(50) NOT NULL,
-  `tel` varchar(50) NOT NULL,
-  `mdp` varchar(50) NOT NULL,
-  `idCb` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `idCb` (`idCb`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
-
---
--- Dumping data for table `client`
---
-
-INSERT INTO `client` (`id`, `nom`, `prenom`, `adresse`, `email`, `tel`, `mdp`, `idCb`) VALUES
-(1, 'Timon', 'Pumba', '5 rue de l''échiquier', 't.pumb@hotmail.com', '05124578', '1254', 1),
-(2, 'Rafiki', 'Simba', '3 rue des écuries', 'r.simba@hotmail.fr', '0637482945', 'azertyuiop', 2),
-(3, 'Patrick', 'Dupond', '156 rue alsace', 'patrick@gmail.com', '0745321435', 'yhhfryjiu', 3),
-(4, 'a', 'a', 'a', 'a', 'a', 'a', 2);
 
 -- --------------------------------------------------------
 
@@ -187,6 +162,37 @@ INSERT INTO `pays` (`id`, `nom`) VALUES
 (3, 'Ile Maurice'),
 (4, 'Madagascar'),
 (5, 'Seychelles');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `personne`
+--
+
+CREATE TABLE IF NOT EXISTS `personne` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nom` varchar(50) NOT NULL,
+  `prenom` varchar(50) NOT NULL,
+  `adresse` varchar(50) NOT NULL,
+  `email` varchar(50) NOT NULL,
+  `tel` varchar(50) NOT NULL,
+  `mdp` varchar(50) NOT NULL,
+  `idCb` int(11) NOT NULL,
+  `type` int(11) NOT NULL COMMENT '1=Client,2=Pilote,3=Administration',
+  PRIMARY KEY (`id`),
+  KEY `idCb` (`idCb`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
+
+--
+-- Dumping data for table `personne`
+--
+
+INSERT INTO `personne` (`id`, `nom`, `prenom`, `adresse`, `email`, `tel`, `mdp`, `idCb`, `type`) VALUES
+(1, 'Timon', 'Pumba', '5 rue de l''échiquier', 't.pumb@hotmail.com', '05124578', '1254', 1, 1),
+(2, 'Rafiki', 'Simba', '3 rue des écuries', 'r.simba@hotmail.fr', '0637482945', 'azertyuiop', 2, 2),
+(3, 'Patrick', 'Dupond', '156 rue alsace', 'patrick@gmail.com', '0745321435', 'yhhfryjiu', 3, 3),
+(4, 'a', 'a', 'a', 'a', 'a', 'a', 2, 3),
+(7, 'Sullenberger', 'Chesley', 'adresse 1', 'chesley.sullenberger@yahoo.fr', '0125456982', 'mdp1', 1, 2);
 
 -- --------------------------------------------------------
 
@@ -240,6 +246,17 @@ CREATE TABLE IF NOT EXISTS `reservation` (
   KEY `idPlace_2` (`idPlace`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `reservation`
+--
+
+INSERT INTO `reservation` (`idClient`, `idVol`, `idPlace`) VALUES
+(4, 3, 15),
+(4, 3, 16),
+(4, 3, 17),
+(4, 3, 18),
+(4, 3, 19);
+
 -- --------------------------------------------------------
 
 --
@@ -254,24 +271,32 @@ CREATE TABLE IF NOT EXISTS `vol` (
   `nom` varchar(50) NOT NULL,
   `ae_depart` int(11) NOT NULL,
   `ae_arrivee` int(11) NOT NULL,
+  `idPilote` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `ae_depart` (`ae_depart`),
   KEY `ae_arrivee` (`ae_arrivee`),
   KEY `ae_depart_2` (`ae_depart`),
-  KEY `ae_arrivee_2` (`ae_arrivee`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+  KEY `ae_arrivee_2` (`ae_arrivee`),
+  KEY `idPilote` (`idPilote`),
+  KEY `idPilote_2` (`idPilote`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=27 ;
 
 --
 -- Dumping data for table `vol`
 --
 
-INSERT INTO `vol` (`id`, `idAvion`, `heure_depart`, `duree`, `nom`, `ae_depart`, `ae_arrivee`) VALUES
-(1, 1, '2019-06-05 06:00:00', 720, 'VOL1', 1, 2),
-(2, 2, '2019-06-05 07:00:00', 725, 'VOL2', 1, 2),
-(3, 1, '2019-07-06 20:00:00', 720, 'VOL3', 1, 2),
-(4, 1, '2019-07-06 07:00:00', 725, 'VOL4', 1, 2),
-(5, 1, '2019-06-15 08:00:00', 800, 'AF512', 1, 2),
-(6, 2, '2019-06-17 15:00:00', 700, 'AF513', 1, 2);
+INSERT INTO `vol` (`id`, `idAvion`, `heure_depart`, `duree`, `nom`, `ae_depart`, `ae_arrivee`, `idPilote`) VALUES
+(3, 1, '2020-02-06 22:00:00', 150, 'AA 2100', 1, 2, 7),
+(4, 1, '2020-02-06 08:00:00', 100, 'AA 4482', 1, 2, 7),
+(9, 1, '2020-02-04 00:00:00', 60, 'AF18', 1, 3, 7),
+(10, 1, '2020-02-12 03:00:00', 120, 'AF 1001', 1, 3, 2),
+(16, 1, '2020-02-27 05:30:00', 180, 'LH 4294', 3, 3, 2),
+(17, 1, '2020-02-05 23:00:00', 90, 'AF 1151', 3, 5, 2),
+(19, 1, '2020-02-11 04:30:00', 0, 'AF 2114', 1, 2, 2),
+(22, 1, '2020-03-10 04:00:00', 30, 'AF 1001', 1, 2, 7),
+(23, 2, '2020-03-10 01:00:00', 60, '', 1, 3, 7),
+(25, 6, '2020-03-12 00:00:00', 780, 'AA 4243', 3, 5, 2),
+(26, 2, '2020-03-11 00:00:00', 60, 'AA 4217', 1, 2, 7);
 
 --
 -- Constraints for dumped tables
@@ -284,10 +309,10 @@ ALTER TABLE `aeroport`
   ADD CONSTRAINT `aeroport_ibfk_1` FOREIGN KEY (`idPays`) REFERENCES `pays` (`id`);
 
 --
--- Constraints for table `client`
+-- Constraints for table `personne`
 --
-ALTER TABLE `client`
-  ADD CONSTRAINT `client_ibfk_1` FOREIGN KEY (`idCb`) REFERENCES `cb` (`id`);
+ALTER TABLE `personne`
+  ADD CONSTRAINT `personne_ibfk_1` FOREIGN KEY (`idCb`) REFERENCES `cb` (`id`);
 
 --
 -- Constraints for table `place`
@@ -301,13 +326,14 @@ ALTER TABLE `place`
 --
 ALTER TABLE `reservation`
   ADD CONSTRAINT `reservation_ibfk_1` FOREIGN KEY (`idVol`) REFERENCES `vol` (`id`),
-  ADD CONSTRAINT `reservation_ibfk_2` FOREIGN KEY (`idClient`) REFERENCES `client` (`id`),
+  ADD CONSTRAINT `reservation_ibfk_2` FOREIGN KEY (`idClient`) REFERENCES `personne` (`id`),
   ADD CONSTRAINT `reservation_ibfk_3` FOREIGN KEY (`idPlace`) REFERENCES `place` (`id`);
 
 --
 -- Constraints for table `vol`
 --
 ALTER TABLE `vol`
+  ADD CONSTRAINT `vol_ibfk_3` FOREIGN KEY (`idPilote`) REFERENCES `personne` (`id`),
   ADD CONSTRAINT `vol_ibfk_1` FOREIGN KEY (`ae_depart`) REFERENCES `aeroport` (`id`),
   ADD CONSTRAINT `vol_ibfk_2` FOREIGN KEY (`ae_arrivee`) REFERENCES `aeroport` (`id`);
 
